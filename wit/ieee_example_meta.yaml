@@ -1,0 +1,22 @@
+---
+template: 'meta/ieeetemplate.tex'
+documentclass: IEEEtran
+classoption: conference
+title: Title 
+author:
+- name: Sirvan Almasi 
+  affiliation: Imperial College London
+  email: s.almasi@imperial.ac.uk
+- name: William J.Knottenbelt 
+  affiliation: Imperial College London
+  email: wjk@imperial.ac.uk
+date: Jan 2021
+biblio-style: IEEEtran
+bibliography: ref.bib
+abstract: |
+  Abstract goes here.
+include-before: |
+  ```{=latex}
+  \pagestyle{plain}
+  ```
+...

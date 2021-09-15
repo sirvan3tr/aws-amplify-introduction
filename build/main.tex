@@ -1,0 +1,403 @@
+\documentclass{tufte-handout}
+
+%\geometry{showframe}% for debugging purposes -- displays the margins
+
+\usepackage{amsmath}
+
+% Set up the images/graphics package
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{graphics/}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+%% Title
+\title{AWS Amplify Introduction}
+
+\author[Sirvan Almasi]{Sirvan Almasi}
+\date{}
+
+% The following package makes prettier tables.  We're all about the bling!
+\usepackage{booktabs}
+
+% The units package provides nice, non-stacked fractions and better spacing
+% for units.
+\usepackage{units}
+
+% The fancyvrb package lets us customize the formatting of verbatim
+% environments.  We use a slightly smaller font.
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% Small sections of multiple columns
+\usepackage{multicol}
+
+% Provides paragraphs of dummy text
+\usepackage{lipsum}
+
+% These commands are used to pretty-print LaTeX commands
+\newcommand{\doccmd}[1]{\texttt{\textbackslash#1}}% command name -- adds backslash automatically
+\newcommand{\docopt}[1]{\ensuremath{\langle}\textrm{\textit{#1}}\ensuremath{\rangle}}% optional command argument
+\newcommand{\docarg}[1]{\textrm{\textit{#1}}}% (required) command argument
+\newenvironment{docspec}{\begin{quote}\noindent}{\end{quote}}% command specification environment
+\newcommand{\docenv}[1]{\textsf{#1}}% environment name
+\newcommand{\docpkg}[1]{\texttt{#1}}% package name
+\newcommand{\doccls}[1]{\texttt{#1}}% document class name
+\newcommand{\docclsopt}[1]{\texttt{#1}}% document class option name
+
+
+\usepackage{algorithmic} % Used for algorithm pseudo-code
+\usepackage{graphicx} % Import graphics. \includegraphics[]{}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{fancyvrb}
+
+\newsavebox{\marginlistingbox}
+\newenvironment{marginlisting}
+  {\fvset{fontsize=\small, tabsize=2}%
+   \setbox\marginlistingbox=\vtop\bgroup
+     \hsize=\marginparwidth
+     \topsep=0pt\partopsep=0pt
+     \vspace*{-1.4\baselineskip}%
+     \Verbatim}
+  {\endVerbatim\egroup\marginnote{\leavevmode\box\marginlistingbox}}
+
+
+\newcommand{\cde}[1]{
+  \textcolor{purple}{\texttt{#1}}
+}
+
+\newcommand{\auth}{
+  \cde{@auth}
+}
+
+\newcommand{\model}{
+  \cde{@model}
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    frame=single,
+    framesep=5pt,
+    rulecolor=\color{codegray},
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\begin{document}
+
+\maketitle
+
+
+AWS Amplify\cite{AmplifyFrameworkDocs2021} is a framework to rapidly
+create web and mobile applications (including APIs). It uses the rich
+AWS ecosystem to speed up development and deployment.
+
+AWS Amplify includes an easy to use CLI, set of libraries for popular
+front-end libraries (e.g.~react and vuejs), and UI components. Using AWS
+Amplify one can create \textbf{authentication}, \textbf{storage},
+\textbf{API} (GraphQL and REST), \textbf{DataStore}, and much more.
+
+\hypertarget{authentication}{%
+\section{Authentication}\label{authentication}}
+
+\hypertarget{api-graphql}{%
+\section{API GraphQL}\label{api-graphql}}
+
+GraphQL\footnote{graphql.org} is a query language for your API. It is
+often compared to the REST architecture. We won't compare them here, but
+a simple Google search will provide you plenty of answers.
+
+\begin{itemize}
+\tightlist
+\item
+  Assuming you have done \cde{amplify init}, you can begin to add an API
+  by doing \cde{amplify add api}. Following the instructions will
+  hopefully get you to where you need to go.
+\item
+  You will be able to update your API schema at:
+\end{itemize}
+
+\cde{/amplify/backend/api/gqls3/schema.graphql}.
+
+\begin{itemize}
+\tightlist
+\item
+  \cde{amplify push} will deploy your API to the AWS cloud services.
+\item
+  Object types that are annotated with \model are top-level entities in
+  the generated API. Objects annotated with \model are stored in Amazon
+  DynamoDB and are capable of being protected via \auth, related to
+  other objects via \cde{@connection}, and streamed into Amazon
+  OpenSearch via \cde{@searchable}. You may also apply the
+  \cde{@versioned} directive to instantly add a version field and
+  conflict detection to a model type.
+\item
+  \cde{createdOn} and \cde{updatedOn} fields are automatically created
+  for your models.
+\end{itemize}
+
+\marginnote[-5cm]{
+\textsc{Amplify GraphQL Data Types:}
+\begin{itemize}
+\itemsep0em 
+\item ID
+\item String
+\item Int
+\item Float
+\item Boolean
+\item AWSDate
+\item AWSTime
+\item AWSDateTime
+\item AWSTimeStamp
+\item AWSEmail
+\item AWSJSON
+\item AWSPhone
+\item AWSURL
+\item AWSIPAddress
+\end{itemize}
+}
+
+\hypertarget{relationships}{%
+\section{Relationships}\label{relationships}}
+
+\cde{@connection} enables you to specify relationships between models.
+1-to-1, 1-to-many, and m-to-m are supported.
+
+\hypertarget{one-to-one}{%
+\subsection{One-to-one}\label{one-to-one}}
+
+\begin{figure}[h]
+\caption{\cde{Project} has one \cde{Team} and we have \cde{teamID} as an identifier for the team that the project belongs to.}
+\begin{lstlisting}
+type Project @model {
+  id: ID!
+  name: String
+  teamID: ID!
+  team: Team @connection(fields: ["teamID"])
+}
+
+type Team @model {
+  id: ID!
+  name: String!
+}
+\end{lstlisting}
+\end{figure}
+
+\hypertarget{one-to-many}{%
+\subsection{One-to-many}\label{one-to-many}}
+
+This needs a \cde{@key} item.
+
+\begin{figure}[h]
+\caption{\cde{Post} can have many \cde{Comment}s.}
+\begin{lstlisting}
+type Post @model {
+  id: ID!
+  title: String!
+  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+}
+
+type Comment @model
+  @key(name: "byPost", fields: ["postID", "content"]) {
+  id: ID!
+  postID: ID!
+  content: String!
+}
+\end{lstlisting}
+\end{figure}
+
+\hypertarget{belongs-to}{%
+\subsection{Belongs to}\label{belongs-to}}
+
+\begin{figure}[h]
+\caption{You can make a connection bi-directional by adding a many-to-one connection to types that already have a one-to-many connection. In this case you add a connection from Comment to Post since each comment belongs to a post:}
+\begin{lstlisting}
+type Post @model {
+  id: ID!
+  title: String!
+  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+}
+
+type Comment @model
+  @key(name: "byPost", fields: ["postID", "content"]) {
+  id: ID!
+  postID: ID!
+  content: String!
+  post: Post @connection(fields: ["postID"])
+}
+\end{lstlisting}
+\end{figure}
+
+\hypertarget{authorization}{%
+\section{Authorization}\label{authorization}}
+
+\marginnote{
+\textsc{GraphQL Operation Types:}
+\begin{itemize}
+\itemsep0em 
+\item \cde{CREATE}
+\item \cde{DELETE}
+\item \cde{GET}
+\item \cde{LIST}
+\item \cde{UPDATE}
+\end{itemize}
+}
+
+Models annotated with \auth are protected by a set of authorization
+rules. When using the \auth directive on object type definitions that
+are also annotated with \model, all resolvers that return objects of
+that type will be protected. When using the \auth directive on a field
+definition, a resolver will be added to the field that authorize access
+based on attributes found in the parent type.
+
+We can protect our models (think of them as database tables) at
+\textbf{model level}; this means that all the fields in that model will
+have the same protection. We can also protect individual fields at
+\textbf{field level authorisation}. We can use both methods at the same
+time. This level of protection is required as we demand different CRUD
+access from our users.
+
+We authorise access with respect to users. We can abstract our users to
+the following types:
+
+\begin{itemize}
+\tightlist
+\item
+  \cde{owner}. The individual that \emph{owns} the record.
+\item
+  \cde{groups}. Static groups of users that have shared permission,
+  e.g.~admins.
+\item
+  \cde{public}. Anyone can access the API.
+\item
+  \cde{private}. The private authorization specifies that everyone will
+  be allowed to access the API with a valid JWT token from the
+  configured Cognito User Pool.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{lstlisting}
+type Post @model
+  @auth (
+    rules: [
+      # allow all authenticated users ability to create posts
+      # allow owners ability to update and delete their posts
+      { allow: owner },
+
+      # allow all authenticated users to read posts
+      { allow: private, operations: [read] },
+
+      # allow all guest users (not authenticated) to read posts
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  title: String
+  owner: String
+}
+\end{lstlisting}
+\end{figure}
+
+\hypertarget{model-level-authorization}{%
+\subsection{Model Level Authorization}\label{model-level-authorization}}
+
+\begin{figure}[h]
+\caption{In this schema, only the owner of the object has the authorization to perform read (getTodo and listTodos), update (updateTodo), and delete (deleteTodo) operations on the owner created object. This prevents the object from being updated or deleted by users other than the creator of the object.}
+\begin{lstlisting}
+type Post @model
+  @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  title: String!
+}
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[h]
+\caption[][1.2cm]{This \auth rule says: only the owner can delete, and update this model. Others can therefore read (get and list) and create.}
+\begin{lstlisting}
+type Todo @model
+  @auth(rules: [{ allow: owner, operations: [create, delete, update] }]) {
+  id: ID!
+  updatedAt: AWSDateTime!
+  content: String!
+}
+\end{lstlisting}
+\end{figure}
+
+\hypertarget{field-level-authorization}{%
+\subsection{Field Level Authorization}\label{field-level-authorization}}
+
+\begin{marginlisting}
+type User @model {
+  id: ID!
+  username: String
+  ssn: String @auth(rules: [
+      { allow: owner,
+      ownerField: "username" }
+    ])
+}
+\end{marginlisting}
+
+\marginnote{
+You might want to have a user model where some fields, like username, are a part of the public profile and the ssn field is visible to owners.
+}
+
+\begin{itemize}
+\tightlist
+\item
+  You may dictate field level authorisation. E.g. you may only want an
+  admin to \texttt{update} a certain field.
+\end{itemize}
+
+\begin{figure}
+\begin{lstlisting}
+type Employee @model {
+  id: ID!
+  email: String
+  username: String
+
+  # Owners & members of the "Admin" group may read employee salaries.
+  # Only members of the "Admin" group may create an employee with a salary
+  # or update a salary.
+  salary: String
+    @auth(rules: [
+      { allow: owner, ownerField: "username", operations: [read] },
+      { allow: groups, groups: ["Admin"], operations: [create, update, read] }
+    ])
+}
+\end{lstlisting}
+\end{figure}
+
+
+
+    
+\bibliographystyle{plain}
+\bibliography{ref.bib}
+
+  
+
+
+
+\end{document}
